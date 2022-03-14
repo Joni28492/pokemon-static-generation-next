@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React, { useState } from 'react'
 import { pokeApi } from '../../api';
 import { Layout } from '../../components/layouts'
-import { Pokemon } from '../../interfaces';
+import { Pokemon, PokemonListResponse } from '../../interfaces';
 import { getPokemonInfo, localFavorites } from '../../utils';
 //https://pokeapi.co/api/v2/pokemon/1
 
@@ -15,7 +15,9 @@ interface Props {
     pokemon: Pokemon;
 }
 
-const PokemonPage: NextPage<Props> = ({ pokemon }) => {
+const PokemonByNamePage: NextPage<Props> = ({ pokemon }) => {
+
+    console.log(pokemon)
 
 
     const [isInFavorites, setIsInFavorites] = useState(localFavorites.existInFavorites(pokemon.id))
@@ -122,24 +124,13 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
-
-    const pokemons151 = [...Array(151)].map((value, index) => `${index + 1}`);
-
+    const { data } = await pokeApi.get<PokemonListResponse>('/pokemon?limit=151')
+    const pokemonNames: string[] = data.results.map(pokemon => pokemon.name)
     return {
-        paths: pokemons151.map(id => ({
-            params: { id: id }
+        paths: pokemonNames.map(name => ({
+            params: { name }
         })),
-        // paths: [
-        //     {
-        //         params: { id: '1' }
-        //     },
-        //     {
-        //         params: { id: '2' }
-        //     },
-        //     {
-        //         params: { id: '3' }
-        //     }
-        // ],
+
         fallback: false
     }
 }
@@ -147,12 +138,12 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     // console.log(ctx.params);
-    const { id } = params as { id: string };
+    const { name } = params as { name: string };
     return {
         props: {
-            pokemon: await getPokemonInfo(id)
+            pokemon: await getPokemonInfo(name),
         }
     }
 }
 
-export default PokemonPage
+export default PokemonByNamePage

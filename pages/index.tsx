@@ -9,11 +9,18 @@ interface Props {
 
 const HomePage: NextPage<Props> = ({ pokemons }) => {
 
-  console.log(pokemons);
+  // console.log(pokemons);
 
 
   return (
     <Layout title='Listado de pokemons'>
+
+
+      {/* <Image
+        src='/img/banner.png'
+        width={200}
+        height={150}
+      /> */}
 
       <Grid.Container gap={2} justify='flex-start'>
         {
@@ -34,12 +41,13 @@ import pokeApi from '../api/pokeApi';
 import { PokemonListResponse, SmallPokemon } from '../interfaces';
 import { Grid } from '@nextui-org/react';
 import { PokemonCard } from '../components/pokemon/PokemonCard';
+import Image from 'next/image';
 //esta func solo se ejecuta del lado del servidor y solo en buildtime
 //por eso sale el hola mundo en la terminal
 export const getStaticProps: GetStaticProps = async (ctx) => {
 
   const { data } = await pokeApi.get<PokemonListResponse>('/pokemon?limit=151');
-  console.log(data);
+  // console.log(data);
   const pokemons: SmallPokemon[] = data.results.map((poke, i) => ({
     ...poke,
     id: i + 1,
