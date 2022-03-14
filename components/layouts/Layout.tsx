@@ -12,7 +12,7 @@ const origin = (typeof window === 'undefined') ? '' : window.location.origin
 //esto nos indica si esta en el front o en el backend
 export const Layout: FC<Props> = ({ children, title }) => {
 
-    console.log({ origin });
+    // console.log({ origin });
 
 
 
