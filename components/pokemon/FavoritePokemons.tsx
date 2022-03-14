@@ -1,5 +1,4 @@
 import { Grid } from '@nextui-org/react'
-import Router from 'next/router';
 import React, { FC } from 'react'
 import { FavoriteCardPokemon } from './FavoriteCardPokemon'
 
